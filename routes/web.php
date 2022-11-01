@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\{
 //Front Routes
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 //Back Routes
 Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
