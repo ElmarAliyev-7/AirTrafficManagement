@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -53,10 +55,23 @@ class AuthController extends Controller
 
         if($request->isMethod('put'))
         {
-//            $request->whenHas('password', function ($input) {
-//                return redirect()->back()->with('warning', 'Password and Confirm Password doesn\'t match');
-//            });
-//            return  redirect()->back()->with('success', 'dsad');
+            Admin::find($this->admin->id())->update([
+                'name'    => $request->name,
+                'surname' => $request->surname,
+                'email'   => $request->email,
+            ]);
+
+            if($request->password){
+                if($request->password == $request->confirm_password){
+                    Admin::find($this->admin->id())->update([
+                        'password'=> Hash::make($request->password),
+                    ]);
+                    $this->admin->logout();
+                    return redirect()->back()->with('info', 'Password Updated Please Loggin again.');
+                }
+                return redirect()->back()->with('warning', 'Password and Confirm Password doesn\'t match');
+            }
+            return redirect()->back()->with('success', 'Updated Successfully');
         }
     }
 }
