@@ -55,15 +55,32 @@ class AuthController extends Controller
 
         if($request->isMethod('put'))
         {
-            Admin::find($this->admin->id())->update([
+            $admin = Admin::find($this->admin->id());
+            $admin->update([
                 'name'    => $request->name,
                 'surname' => $request->surname,
                 'email'   => $request->email,
             ]);
 
+            if ($files = $request->file('image')) {
+                request()->validate([
+                    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                ]);
+                $image_path = public_path($admin->image);
+
+                if (File::exists($image_path)) {
+                    File::delete($image_path);
+                }
+                $destinationPath = public_path('/back/profile');
+                $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                $files->move($destinationPath, $profileImage);
+                $admin->update(['image' => 'images/' . $profileImage]);
+            }
+
+
             if($request->password){
                 if($request->password == $request->confirm_password){
-                    Admin::find($this->admin->id())->update([
+                    $admin->update([
                         'password'=> Hash::make($request->password),
                     ]);
                     $this->admin->logout();

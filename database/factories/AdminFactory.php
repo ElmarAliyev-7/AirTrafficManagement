@@ -23,6 +23,7 @@ class AdminFactory extends Factory
         return [
             'name'    => 'Cəlal',
             'surname' => 'Səttarov',
+            'image'   => asset('user.jpg'),
             'email'   => 'celal@gmail.com',
             'password'=> Hash::make('Celal8212!'),
         ];

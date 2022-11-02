@@ -9,9 +9,12 @@ class Admin extends Authenticatable
 {
     use HasFactory;
 
+    protected $guarded = 'admin';
+
     protected $fillable = [
         'name',
         'surname',
+        'image',
         'email',
         'password',
     ];

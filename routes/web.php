@@ -19,8 +19,8 @@ Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
     });
 
     Route::group(['middleware'=> 'isLogin'], function(){
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+        Route::get('/dashboard',      [DashboardController::class, 'index'])->name('dashboard');
+        Route::match(['get', 'put'],'/about-us', [DashboardController::class, 'aboutUs'])->name('about-us');
 
         Route::match(['get', 'put'], '/profile', [AuthController::class, 'profile'])->name('profile');
         Route::get('/logout',   [AuthController::class, 'logOut'])->name('logout');
