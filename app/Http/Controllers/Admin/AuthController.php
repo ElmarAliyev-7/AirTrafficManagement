@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
 
 class AuthController extends Controller
 {
@@ -62,21 +63,15 @@ class AuthController extends Controller
                 'email'   => $request->email,
             ]);
 
-            if ($files = $request->file('image')) {
-                request()->validate([
-                    'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                ]);
-                $image_path = public_path($admin->image);
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = $file->getClientOriginalName();
 
-                if (File::exists($image_path)) {
-                    File::delete($image_path);
-                }
-                $destinationPath = public_path('/back/profile');
-                $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-                $files->move($destinationPath, $profileImage);
-                $admin->update(['image' => 'images/' . $profileImage]);
+                $extension = $file->getClientOriginalExtension();
+                $fileName = str_random(5)."-".date('his')."-".str_random(3).".".$extension;
+                $destinationPath = public_path('back/uploads');
+                $file->move($destinationPath, $fileName);
             }
-
 
             if($request->password){
                 if($request->password == $request->confirm_password){
