@@ -518,7 +518,7 @@
                         >
                             <img
                                 class="object-cover w-8 h-8 rounded-full"
-                                src="{{Auth::guard('admin')->user()->image}}"
+                                src="{{asset(Auth::guard('admin')->user()->image)}}"
                                 alt=""
                                 aria-hidden="true"
                             />
