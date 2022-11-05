@@ -57,33 +57,30 @@ class AuthController extends Controller
         if($request->isMethod('put'))
         {
             $admin = Admin::find($this->admin->id());
-            $admin->update([
-                'name'    => $request->name,
-                'surname' => $request->surname,
-                'email'   => $request->email,
-            ]);
+            $admin->name    = $request->name;
+            $admin->surname = $request->surname;
+            $admin->email   = $request->email;
 
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = $file->getClientOriginalName();
-
-                $extension = $file->getClientOriginalExtension();
-                $fileName = str_random(5)."-".date('his')."-".str_random(3).".".$extension;
-                $destinationPath = public_path('back/uploads');
-                $file->move($destinationPath, $fileName);
-            }
-
-            if($request->password){
-                if($request->password == $request->confirm_password){
-                    $admin->update([
-                        'password'=> Hash::make($request->password),
+            try {
+                if ($files = $request->file('image')) {
+                    request()->validate([
+                        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                     ]);
-                    $this->admin->logout();
-                    return redirect()->back()->with('info', 'Password Updated Please Loggin again.');
+                    $image_path = public_path('back/uploads'.$admin->image);
+                    if (File::exists($image_path)) {
+                        File::delete($image_path);
+                    }
+                    $destinationPath = public_path('back/uploads/');
+                    $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                    $files->move($destinationPath, $profileImage);
+                    $admin->image = public_path('/back/uploads/'). $profileImage;
                 }
-                return redirect()->back()->with('warning', 'Password and Confirm Password doesn\'t match');
+                $admin->save();
+                return redirect()->back()->with('success', 'Uploaded Successfully !');
+
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
             }
-            return redirect()->back()->with('success', 'Updated Successfully');
         }
     }
 }

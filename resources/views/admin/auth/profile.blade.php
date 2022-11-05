@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 @section('title', 'Profile')
 @section('content')
-    <form action="{{route('admin.profile')}}" method="post">
+    <form action="{{route('admin.profile')}}" method="post" enctype="multipart/form-data">
         @csrf
         @method('put')
 
