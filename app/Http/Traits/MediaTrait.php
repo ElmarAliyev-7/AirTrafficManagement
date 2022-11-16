@@ -6,22 +6,27 @@ use Illuminate\Support\Facades\File;
 
 trait MediaTrait {
 
-    public function uploadImage($request_file ,$img_column)
-   {
+    public function uploadImage($request_file, $path ,$old_image)
+    {
        if ($files = $request_file) {
            request()->validate([
                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
            ]);
-           $image_path = public_path('back/uploads'.$img_column);
-           if (File::exists($image_path)) {
-               File::delete($image_path);
-           }
-           $destinationPath = public_path('back/uploads/');
-           $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-           $files->move($destinationPath, $profileImage);
-           return 'back/uploads/'. $profileImage;
+           $image     = date('YmdHis') . "." . $files->getClientOriginalExtension();
+           $result    = explode('\AirTrafficManagement\\' ,$path );
+           $files->move($path, $image);
+           $result[1] = str_replace('\\', '/', $result[1]);
+           return $result[1].$image;
        }
-       return $img_column;
-   }
+       return $old_image;
+    }
+
+    public function mediaDestroy($path)
+    {
+        if(File::exists($path))
+        {
+            File::delete($path);
+        }
+    }
 
 }

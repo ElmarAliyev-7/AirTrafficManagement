@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use App\Http\Traits\MediaTrait;
 
 
@@ -64,7 +63,12 @@ class AuthController extends Controller
                 $admin->name    = $request->name;
                 $admin->surname = $request->surname;
                 $admin->email   = $request->email;
-                $admin->image   = $this->uploadImage($request->file('image'), $admin->image);
+                $this->mediaDestroy(storage_path('app/public/profile/').$admin->image);
+                $admin->image   = $this->uploadImage(
+                    $request->file('image'),
+                    storage_path('app/public/profile/'),
+                    $admin->image
+                );
                 $admin->save();
                 return redirect()->back()->with('success', 'Uploaded Successfully !');
 

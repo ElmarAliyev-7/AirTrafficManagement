@@ -22,7 +22,7 @@ class AboutUsFactory extends Factory
         return [
             'title'       => 'Air Traffic Management',
             'description' => 'Air Traffic Management Desc',
-            'image'       => asset('air_traffic_management.png'),
+            'image'       => asset('back/air_traffic_management.png'),
         ];
     }
 }
