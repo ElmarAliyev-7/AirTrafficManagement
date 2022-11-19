@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AboutUs;
+use App\Models\Pilot;
+
 use App\Http\Traits\MediaTrait;
 
 class DashboardController extends Controller
@@ -30,12 +32,8 @@ class DashboardController extends Controller
                 $about_us = AboutUs::first();
                 $about_us->title       = $request->title;
                 $about_us->description = $request->description;
-                $this->mediaDestroy(public_path('back').$about_us->image);
-                $about_us->image       = $this->uploadImage(
-                    $request->file('image'),
-                    public_path('back') ,
-                    $about_us->image
-                );
+                $this->mediaDestroy($about_us->image);
+                $about_us->image  = $this->uploadImageToAdmin($request->file('image'), $about_us->image);
                 $about_us->save();
                 return redirect()->back()->with('success', 'Uploaded Successfully !');
 
@@ -43,5 +41,11 @@ class DashboardController extends Controller
                 return redirect()->back()->with('error', $e->getMessage());
             }
         }
+    }
+
+    public function pilots()
+    {
+        $pilots = Pilot::all();
+        return view('admin.pilots.index', compact('pilots'));
     }
 }

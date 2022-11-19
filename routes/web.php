@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
     DashboardController,
     AuthController,
+    PilotController,
 };
 
 //Front Routes
@@ -19,10 +20,18 @@ Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
     });
 
     Route::group(['middleware'=> 'isLogin'], function(){
-        Route::get('/dashboard',      [DashboardController::class, 'index'])->name('dashboard');
-        Route::match(['get', 'put'],'/about-us', [DashboardController::class, 'aboutUs'])->name('about-us');
 
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::match(['get', 'put'],'/about-us', [DashboardController::class, 'aboutUs'])->name('about-us');
         Route::match(['get', 'put'], '/profile', [AuthController::class, 'profile'])->name('profile');
+
+        //Pilots
+        Route::get('/pilots',    [DashboardController::class, 'pilots'])->name('pilots');
+        Route::match(['get', 'post'],'/create-pilot',     [PilotController::class, 'create'])->name('create-pilot');
+        Route::match(['get', 'put'],'/update-pilot/{id}', [PilotController::class, 'update'])->name('update-pilot');
+        Route::delete('/delete-pilot/{id}', [PilotController::class, 'delete'])->name('delete-pilot');
+
+        //Logout
         Route::get('/logout',   [AuthController::class, 'logOut'])->name('logout');
     });
 });
