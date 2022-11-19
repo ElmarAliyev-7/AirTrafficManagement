@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AboutUs;
 use App\Models\Pilot;
+use App\Models\Plane;
 
 use App\Http\Traits\MediaTrait;
 
@@ -20,16 +21,16 @@ class DashboardController extends Controller
 
     public function aboutUs(Request $request)
     {
+        $about_us = AboutUs::first();
+
         if($request->isMethod('get'))
         {
-            $about_us = AboutUs::first();
             return view('admin.about-us', compact('about_us'));
         }
 
         if($request->isMethod('put'))
         {
             try {
-                $about_us = AboutUs::first();
                 $about_us->title       = $request->title;
                 $about_us->description = $request->description;
                 $this->mediaDestroy($about_us->image);
@@ -48,4 +49,11 @@ class DashboardController extends Controller
         $pilots = Pilot::all();
         return view('admin.pilots.index', compact('pilots'));
     }
+
+    public function planes()
+    {
+        $planes = Plane::all();
+        return view('admin.planes.index', compact('planes'));
+    }
+
 }
