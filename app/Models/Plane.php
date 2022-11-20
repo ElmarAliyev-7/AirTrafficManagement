@@ -14,4 +14,9 @@ class Plane extends Model
         'about',
         'image',
     ];
+
+    public function flights()
+    {
+        return $this->hasMany(Flight::class);
+    }
 }

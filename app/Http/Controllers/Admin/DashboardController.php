@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Flight;
 use Illuminate\Http\Request;
 use App\Models\AboutUs;
 use App\Models\Pilot;
@@ -65,6 +66,12 @@ class DashboardController extends Controller
     {
         $sliders = Slider::all();
         return view('admin.sliders.index', compact('sliders'));
+    }
+
+    public function flights()
+    {
+        $flights = Flight::with(['pilot:id,fullname,image', 'plane:id,title,image'])->get();
+        return view('admin.flights.index', compact('flights'));
     }
 
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\{
     PilotController,
     PlaneController,
     SliderController,
+    FlightController,
 };
 
 //Front Routes
@@ -45,6 +46,12 @@ Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
         Route::match(['get', 'post'],'/create-plane',     [PlaneController::class, 'create'])->name('create-plane');
         Route::match(['get', 'put'],'/update-plane/{id}', [PlaneController::class, 'update'])->name('update-plane');
         Route::delete('/delete-plane/{id}', [PlaneController::class, 'delete'])->name('delete-plane');
+
+        //Flights
+        Route::get('flights', [DashboardController::class, 'flights'])->name('flights');
+        Route::match(['get', 'post'],'/create-flight',     [FlightController::class, 'create'])->name('create-flight');
+        Route::match(['get', 'put'],'/update-flight/{id}', [FlightController::class, 'update'])->name('update-flight');
+        Route::delete('/delete-flight/{id}', [FlightController::class, 'delete'])->name('delete-flight');
 
         //Profile
         Route::match(['get', 'put'], '/profile', [AuthController::class, 'profile'])->name('profile');
