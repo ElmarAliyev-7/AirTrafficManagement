@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\{
     AuthController,
     PilotController,
     PlaneController,
+    SliderController,
 };
 
 //Front Routes
@@ -21,10 +22,17 @@ Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
     });
 
     Route::group(['middleware'=> 'isLogin'], function(){
-
+        //Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        //Sliders
+        Route::get('sliders', [DashboardController::class, 'sliders'])->name('sliders');
+        Route::match(['get', 'post'],'/create-slider',     [SliderController::class, 'create'])->name('create-slider');
+        Route::match(['get', 'put'],'/update-slider/{id}', [SliderController::class, 'update'])->name('update-slider');
+        Route::delete('/delete-slider/{id}',               [SliderController::class, 'delete'])->name('delete-slider');
+
+        //About us
         Route::match(['get', 'put'],'/about-us', [DashboardController::class, 'aboutUs'])->name('about-us');
-        Route::match(['get', 'put'], '/profile', [AuthController::class, 'profile'])->name('profile');
 
         //Pilots
         Route::get('/pilots', [DashboardController::class, 'pilots'])->name('pilots');
@@ -37,6 +45,9 @@ Route::group(['prefix' => 'admin' , 'as'  => 'admin.'], function() {
         Route::match(['get', 'post'],'/create-plane',     [PlaneController::class, 'create'])->name('create-plane');
         Route::match(['get', 'put'],'/update-plane/{id}', [PlaneController::class, 'update'])->name('update-plane');
         Route::delete('/delete-plane/{id}', [PlaneController::class, 'delete'])->name('delete-plane');
+
+        //Profile
+        Route::match(['get', 'put'], '/profile', [AuthController::class, 'profile'])->name('profile');
 
         //Logout
         Route::get('/logout',   [AuthController::class, 'logOut'])->name('logout');

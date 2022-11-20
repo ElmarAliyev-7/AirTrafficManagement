@@ -8,6 +8,7 @@
             <tr
                 class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
             >
+                <th class="px-4 py-3">#</th>
                 <th class="px-4 py-3">Pilot</th>
                 <th class="px-4 py-3">About</th>
                 <th class="px-4 py-3">Date</th>
@@ -17,6 +18,7 @@
             <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
             @foreach($pilots as $pilot)
                 <tr class="text-gray-700 dark:text-gray-400">
+                <td class="px-4 py-3 text-sm">{{$loop->iteration}}</td>
                 <td class="px-4 py-3">
                     <div class="flex items-center text-sm">
                         <!-- Avatar with inset shadow -->

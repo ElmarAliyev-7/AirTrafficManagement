@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AboutUs;
 use App\Models\Pilot;
 use App\Models\Plane;
+use App\Models\Slider;
 
 use App\Http\Traits\MediaTrait;
 
@@ -16,7 +17,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard');
+        $pilots_count = Pilot::count();
+        $planes_count = Plane::count();
+        return view('admin.dashboard', compact('pilots_count', 'planes_count'));
     }
 
     public function aboutUs(Request $request)
@@ -33,7 +36,9 @@ class DashboardController extends Controller
             try {
                 $about_us->title       = $request->title;
                 $about_us->description = $request->description;
-                $this->mediaDestroy($about_us->image);
+                if($request->file('image')){
+                    $this->mediaDestroy($about_us->image);
+                }
                 $about_us->image  = $this->uploadImageToAdmin($request->file('image'), $about_us->image);
                 $about_us->save();
                 return redirect()->back()->with('success', 'Uploaded Successfully !');
@@ -54,6 +59,12 @@ class DashboardController extends Controller
     {
         $planes = Plane::all();
         return view('admin.planes.index', compact('planes'));
+    }
+
+    public function sliders()
+    {
+        $sliders = Slider::all();
+        return view('admin.sliders.index', compact('sliders'));
     }
 
 }

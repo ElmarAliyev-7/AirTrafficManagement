@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Planes')
+@section('title', 'Sliders')
 @section('content')
     <div class="w-full overflow-hidden rounded-lg shadow-xs">
         <div class="w-full overflow-x-auto">
@@ -10,13 +10,12 @@
                 >
                     <th class="px-4 py-3">#</th>
                     <th class="px-4 py-3">Title</th>
-                    <th class="px-4 py-3">About</th>
-                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Description</th>
                     <th class="px-4 py-3">Actions</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                @foreach($planes as $plane)
+                @foreach($sliders as $slider)
                     <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3 text-sm">{{$loop->iteration}}</td>
                         <td class="px-4 py-3">
@@ -27,7 +26,7 @@
                                 >
                                     <img
                                         class="object-cover w-full h-full rounded-full"
-                                        src="{{asset($plane->image)}}"
+                                        src="{{asset($slider->image)}}"
                                         alt=""
                                         loading="lazy"
                                     />
@@ -37,18 +36,15 @@
                                     ></div>
                                 </div>
                                 <div>
-                                    <p class="font-semibold">{{$plane->title}}</p>
+                                    <p class="font-semibold">{{$slider->title}}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{Str::limit($plane->about, 30)}}
+                            {{Str::limit($slider->description, 30)}}
                         </td>
                         <td class="px-4 py-3 text-sm">
-                            {{$plane->created_at}}
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            <a href="{{route('admin.update-plane', $plane->id)}}">
+                            <a href="{{route('admin.update-slider', $slider->id)}}">
                                 <button
                                     class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                                 >
@@ -56,7 +52,7 @@
                                 </button>
                             </a>
 
-                            <form method="post" action="{{route('admin.delete-plane', $plane->id)}}" style="margin-top: 4px;">
+                            <form method="post" action="{{route('admin.delete-slider', $slider->id)}}" style="margin-top: 4px;">
                                 @csrf
                                 @method('delete')
                                 <button type="submit"

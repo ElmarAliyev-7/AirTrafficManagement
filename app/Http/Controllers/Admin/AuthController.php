@@ -63,7 +63,9 @@ class AuthController extends Controller
                 $admin->name    = $request->name;
                 $admin->surname = $request->surname;
                 $admin->email   = $request->email;
-                $this->mediaDestroy($admin->image);
+                if($request->file('image')){
+                    $this->mediaDestroy($admin->image);
+                }
                 $admin->image   = $this->uploadImageToAdmin($request->file('image'), $admin->image);
                 $admin->save();
                 return redirect()->back()->with('success', 'Uploaded Successfully !');
